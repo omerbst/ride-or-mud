@@ -91,8 +91,8 @@ export default function MapView({ trails, scores, weather }) {
                                     {status}
                                 </div>
                                 <div className="popup-details">
-                                    <strong>Soil:</strong> {trail.soil_type}<br />
-                                    <strong>48h Rain:</strong> {weatherData?.rainfall.totalRain.toFixed(1)} mm<br />
+                                    <strong>Soil:</strong> {trail.soil_type} ({trail.mud_index})<br />
+                                    <strong>48h Rain:</strong> {scoreData.p48} mm (×{scoreData.mudFactor})<br />
                                     <strong>Drive:</strong> {scoreData.driveMinutes} min<br />
                                     <strong>Length:</strong> {trail.length_km} km ({trail.difficulty})
                                 </div>

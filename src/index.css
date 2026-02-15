@@ -285,6 +285,8 @@ body::before {
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .trail-card::before {
@@ -472,6 +474,73 @@ body::before {
   letter-spacing: 0.05em;
 }
 
+/* ===== Clickable Weather Item ===== */
+.weather-item-clickable {
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.weather-item-clickable:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* ===== Hourly Temperature Grid ===== */
+.hourly-temps {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  animation: slideDown 0.3s ease;
+}
+
+.hourly-temps-header {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.hourly-temps-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.2rem;
+}
+
+.hourly-temp-cell {
+  text-align: center;
+  padding: 0.25rem 0.1rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hourly-temp-cell.hourly-temp-highlight {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.hourly-temp-hour {
+  font-size: 0.55rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1px;
+}
+
+.hourly-temp-value {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.hourly-temp-highlight .hourly-temp-value {
+  color: var(--color-accent-blue);
+}
+
+@media (max-width: 640px) {
+  .hourly-temps-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
 /* ===== Score Breakdown ===== */
 .score-breakdown {
   display: flex;
@@ -536,6 +605,27 @@ body::before {
 
 .breakdown-dot.dist {
   background: var(--color-accent-green);
+}
+
+/* ===== Score Formula ===== */
+.score-formula {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.formula-text {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  font-family: "Inter", monospace;
+  letter-spacing: 0.02em;
+}
+
+.formula-text strong {
+  color: var(--color-text-primary);
+  font-weight: 700;
 }
 
 /* ===== Rainfall Chart Section ===== */

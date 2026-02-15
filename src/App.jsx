@@ -24,14 +24,14 @@ function toDateStr(d) {
   return d.toISOString().slice(0, 10);
 }
 
-// Helper: get max selectable date (5 days from now — Tomorrow.io free tier limit)
+// Helper: max selectable date (5 days from now — Open-Meteo forecast limit)
 function getMaxDate() {
   const d = new Date();
   d.setDate(d.getDate() + 5);
   return toDateStr(d);
 }
 
-// Helper: nice label for the selected date
+// Helper: nice label for selected date
 function getDateLabel(dateStr) {
   const target = new Date(dateStr + 'T00:00:00');
   const today = new Date();
@@ -68,13 +68,12 @@ export default function App() {
     setError(null);
 
     const useDateStr = dateStr || targetDateStr;
-    const targetDate = new Date(useDateStr + 'T07:00:00'); // morning ride
 
     try {
       const inRange = trails.filter(isWithinDriveRange);
       setFilteredTrails(inRange);
 
-      const weather = await fetchAllTrailsWeather(inRange, targetDate);
+      const weather = await fetchAllTrailsWeather(inRange, useDateStr);
       setWeatherData(weather);
 
       const newScores = {};
@@ -98,11 +97,10 @@ export default function App() {
     setTargetDateStr(newDateStr);
     setDateLabel(getDateLabel(newDateStr));
 
-    const targetDate = new Date(newDateStr + 'T07:00:00');
     const inRange = trails.filter(isWithinDriveRange);
 
-    // Try to re-score from cached raw data (instant, no API calls)
-    const cached = rescoreCachedWeather(inRange, targetDate);
+    // Try cache first (instant, no API calls)
+    const cached = rescoreCachedWeather(inRange, newDateStr);
     if (cached) {
       setWeatherData(cached);
       const newScores = {};
@@ -114,7 +112,6 @@ export default function App() {
       setScores(newScores);
       setFilteredTrails(inRange);
     } else {
-      // No cache — need fresh API calls
       loadData(newDateStr);
     }
   }, [loadData]);
@@ -124,11 +121,11 @@ export default function App() {
   }, []);
 
   // Count trails by score color
-  const greenCount = Object.values(scores).filter((s) => s.score >= 70).length;
+  const greenCount = Object.values(scores).filter((s) => s.score > 80).length;
   const yellowCount = Object.values(scores).filter(
-    (s) => s.score >= 40 && s.score < 70
+    (s) => s.score > 40 && s.score <= 80
   ).length;
-  const redCount = Object.values(scores).filter((s) => s.score < 40).length;
+  const redCount = Object.values(scores).filter((s) => s.score <= 40).length;
 
   return (
     <>
@@ -138,8 +135,8 @@ export default function App() {
           <div className="header-logo">
             <Bike size={28} />
             <div>
-              <h1>TrailScore IL</h1>
-              <div className="subtitle">MTB RIDE RECOMMENDER</div>
+              <h1>Ride or Mud</h1>
+              <div className="subtitle">MTB TRAIL RECOMMENDER — ISRAEL</div>
             </div>
           </div>
 
@@ -205,7 +202,7 @@ export default function App() {
           </div>
           <div className="status-chip">
             <CloudRain size={14} />
-            Tomorrow.io
+            Open-Meteo
           </div>
           <div className="status-chip">
             🟢 {greenCount} &nbsp; 🟡 {yellowCount} &nbsp; 🔴 {redCount}
@@ -224,7 +221,7 @@ export default function App() {
           <div className="loading-overlay">
             <div className="loading-spinner" />
             <div className="loading-text">
-              Fetching weather data from Tomorrow.io...
+              Fetching weather data from Open-Meteo...
             </div>
           </div>
         ) : error ? (

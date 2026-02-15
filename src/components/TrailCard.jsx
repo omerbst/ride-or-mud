@@ -6,7 +6,6 @@ import {
     Ruler,
     Droplets,
     Thermometer,
-    Wind,
     ChevronDown,
     ChevronUp,
     CloudRain,
@@ -16,21 +15,13 @@ import RainfallChart from './RainfallChart';
 
 export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) {
     const [expanded, setExpanded] = useState(false);
+    const [showHourly, setShowHourly] = useState(false);
     const color = getScoreColor(scoreData.score);
     const status = getStatusLabel(scoreData.score);
 
-    const displayTemp =
-        weatherData.forecast.tomorrowMorningTemp ??
-        weatherData.current?.temperature ??
-        null;
-    const tempLabel =
-        weatherData.forecast.tomorrowMorningTemp != null
-            ? `${dateLabel || 'Target'} AM`
-            : 'Now';
-
     return (
         <div className={`trail-card score-${color}`}>
-            {/* Clickable header with name and score */}
+            {/* Header: name + score badge */}
             <div className="trail-card-header">
                 <div>
                     <div className="trail-name">{trail.name}</div>
@@ -71,65 +62,65 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
             {/* Description */}
             <div className="trail-description">{trail.description}</div>
 
+            {/* Spacer to push weather + button to bottom */}
+            <div style={{ flex: 1 }} />
+
             {/* Weather Summary */}
             <div className="weather-summary">
                 <div className="weather-item">
                     <Droplets size={16} />
                     <span className="weather-value">
-                        {weatherData.rainfall.totalRain.toFixed(1)} mm
+                        {scoreData.p48} mm
                     </span>
-                    <span className="weather-label">48h Rain</span>
+                    <span className="weather-label">Past 4d Rain</span>
                 </div>
-                <div className="weather-item">
+                <div
+                    className="weather-item weather-item-clickable"
+                    onClick={(e) => { e.stopPropagation(); setShowHourly(!showHourly); }}
+                    title="Click for hourly forecast"
+                >
                     <Thermometer size={16} />
                     <span className="weather-value">
-                        {displayTemp != null ? `${displayTemp}°C` : '—'}
+                        {scoreData.temp9am != null ? `${Math.round(scoreData.temp9am)}°C` : '—'}
                     </span>
-                    <span className="weather-label">{tempLabel}</span>
+                    <span className="weather-label">{dateLabel || 'Target'} 9AM</span>
                 </div>
                 <div className="weather-item">
                     <CloudRain size={16} />
                     <span className="weather-value">
-                        {weatherData.forecast.rainProbability}%
+                        {scoreData.rainProbability != null ? `${scoreData.rainProbability}%` : '—'}
                     </span>
                     <span className="weather-label">Rain Prob</span>
                 </div>
             </div>
 
-            {/* Score Breakdown Bars */}
-            <div style={{ marginTop: '0.5rem' }}>
-                <div className="score-breakdown">
-                    <div className="breakdown-bar">
-                        <div
-                            className="breakdown-fill mud"
-                            style={{ width: `${scoreData.mud}%` }}
-                        />
+            {/* Hourly Temperature Forecast (toggled by clicking temp) */}
+            {showHourly && scoreData.hourlyTemps && scoreData.hourlyTemps.length > 0 && (
+                <div className="hourly-temps">
+                    <div className="hourly-temps-header">
+                        Hourly Temperature — {dateLabel}
                     </div>
-                    <div className="breakdown-bar">
-                        <div
-                            className="breakdown-fill weather"
-                            style={{ width: `${scoreData.weather}%` }}
-                        />
-                    </div>
-                    <div className="breakdown-bar">
-                        <div
-                            className="breakdown-fill dist"
-                            style={{ width: `${scoreData.distance}%` }}
-                        />
+                    <div className="hourly-temps-grid">
+                        {scoreData.hourlyTemps.map((h, i) => {
+                            const hour = new Date(h.time).getHours();
+                            const is9am = hour === 9;
+                            return (
+                                <div
+                                    key={i}
+                                    className={`hourly-temp-cell${is9am ? ' hourly-temp-highlight' : ''}`}
+                                >
+                                    <div className="hourly-temp-hour">
+                                        {String(hour).padStart(2, '0')}:00
+                                    </div>
+                                    <div className="hourly-temp-value">
+                                        {Math.round(h.temp)}°
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
-                <div className="breakdown-labels">
-                    <span className="breakdown-label">
-                        <span className="breakdown-dot mud" /> Mud {scoreData.mud}
-                    </span>
-                    <span className="breakdown-label">
-                        <span className="breakdown-dot weather" /> Weather {scoreData.weather}
-                    </span>
-                    <span className="breakdown-label">
-                        <span className="breakdown-dot dist" /> Dist {scoreData.distance}
-                    </span>
-                </div>
-            </div>
+            )}
 
             {/* Expand/Collapse button */}
             <button
@@ -172,43 +163,79 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                 )}
             </button>
 
-            {/* Expandable Details Section */}
+            {/* Expandable Details */}
             {expanded && (
                 <div style={{ marginTop: '0.75rem' }}>
-                    {/* Current conditions */}
-                    <div
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1fr 1fr 1fr',
-                            gap: '0.5rem',
-                            marginBottom: '0.75rem',
+                    {/* Daily rainfall breakdown */}
+                    {weatherData.dailyRainfall && weatherData.dailyRainfall.length > 0 && (
+                        <div style={{ marginBottom: '0.75rem' }}>
+                            <div style={{
+                                fontSize: '0.75rem',
+                                color: 'var(--color-text-secondary)',
+                                marginBottom: '0.5rem',
+                                fontWeight: 500,
+                            }}>
+                                Daily Rainfall (mm)
+                            </div>
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: `repeat(${Math.min(weatherData.dailyRainfall.length, 8)}, 1fr)`,
+                                gap: '0.35rem',
+                            }}>
+                                {weatherData.dailyRainfall.map((d, i) => {
+                                    const isTarget = d.date === weatherData.targetDate?.date;
+                                    const dayLabel = new Date(d.date + 'T12:00:00').toLocaleDateString('en-IL', { weekday: 'short' });
+                                    return (
+                                        <div
+                                            key={i}
+                                            style={{
+                                                textAlign: 'center',
+                                                padding: '0.35rem 0.25rem',
+                                                borderRadius: '6px',
+                                                background: isTarget
+                                                    ? 'rgba(59, 130, 246, 0.15)'
+                                                    : 'rgba(255,255,255,0.03)',
+                                                border: isTarget
+                                                    ? '1px solid rgba(59, 130, 246, 0.3)'
+                                                    : '1px solid transparent',
+                                            }}
+                                        >
+                                            <div style={{
+                                                fontSize: '0.6rem',
+                                                color: isTarget ? 'var(--color-accent-blue)' : 'var(--color-text-muted)',
+                                                marginBottom: 2,
+                                            }}>
+                                                {dayLabel}
+                                            </div>
+                                            <div style={{
+                                                fontSize: '0.85rem',
+                                                fontWeight: 600,
+                                                color: d.rain > 0
+                                                    ? 'var(--color-accent-blue)'
+                                                    : 'var(--color-text-secondary)',
+                                            }}>
+                                                {d.rain.toFixed(1)}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Today's conditions */}
+                    {weatherData.current && (
+                        <div style={{
                             fontSize: '0.8rem',
                             color: 'var(--color-text-secondary)',
-                        }}
-                    >
-                        <div>
-                            <Thermometer size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} />
-                            Now: {weatherData.current?.temperature != null ? `${weatherData.current.temperature}°C` : '—'}
-                        </div>
-                        <div>
-                            <Droplets size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} />
-                            Humidity: {weatherData.current?.humidity ?? '—'}%
-                        </div>
-                        <div>
-                            <Wind size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} />
-                            Wind: {weatherData.current?.windSpeed ?? '—'} m/s
-                        </div>
-                    </div>
-
-                    {/* Rainfall chart */}
-                    {weatherData.rainfall.hourlyData.length > 0 ? (
-                        <RainfallChart
-                            hourlyData={weatherData.rainfall.hourlyData}
-                            totalRain={weatherData.rainfall.totalRain}
-                        />
-                    ) : (
-                        <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '0.8rem', padding: '1rem' }}>
-                            No hourly rainfall data available
+                            padding: '0.5rem',
+                            background: 'rgba(255,255,255,0.03)',
+                            borderRadius: '6px',
+                        }}>
+                            <strong>Today:</strong>{' '}
+                            Max {weatherData.current.tempMax != null ? `${Math.round(weatherData.current.tempMax)}°C` : '—'},{' '}
+                            Rain Prob {weatherData.current.rainProbability ?? '—'}%,{' '}
+                            Precip {weatherData.current.rainSum?.toFixed(1) ?? '0.0'} mm
                         </div>
                     )}
                 </div>
