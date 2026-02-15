@@ -161,14 +161,14 @@ export default function App() {
                 onClick={() => setActiveTab('dashboard')}
               >
                 <LayoutDashboard size={16} />
-                Dashboard
+                <span className="tab-btn-label">Dashboard</span>
               </button>
               <button
                 className={`tab-btn ${activeTab === 'map' ? 'active' : ''}`}
                 onClick={() => setActiveTab('map')}
               >
                 <Map size={16} />
-                Map
+                <span className="tab-btn-label">Map</span>
               </button>
             </div>
 
@@ -179,7 +179,7 @@ export default function App() {
               title="Refresh weather data"
             >
               <RefreshCw size={14} className={loading ? 'spin' : ''} />
-              Refresh
+              <span className="refresh-text">Refresh</span>
             </button>
           </div>
         </div>
