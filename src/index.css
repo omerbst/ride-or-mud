@@ -105,6 +105,17 @@ body::before {
   letter-spacing: 0.05em;
 }
 
+.version-tag {
+  font-size: 0.55rem;
+  color: var(--color-accent-blue);
+  background: rgba(59, 130, 246, 0.12);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-weight: 600;
+  margin-left: 0.3rem;
+  vertical-align: middle;
+}
+
 .header-actions {
   display: flex;
   align-items: center;

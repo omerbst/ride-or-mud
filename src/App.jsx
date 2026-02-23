@@ -136,7 +136,7 @@ export default function App() {
             <Bike size={28} />
             <div>
               <h1>Ride or Mud</h1>
-              <div className="subtitle">MTB TRAIL RECOMMENDER — ISRAEL</div>
+              <div className="subtitle">MTB TRAIL RECOMMENDER — ISRAEL <span className="version-tag">v1.3</span></div>
             </div>
           </div>
 
