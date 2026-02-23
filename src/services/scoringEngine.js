@@ -61,10 +61,10 @@ const MUD_FACTORS = {
  * Penalty scales linearly with rain up to 5mm (fully wet rocks).
  */
 const ROCK_SLIP_PENALTY = {
-    "Limestone": 15,
-    "Basalt": 5,
+    "Limestone": 30,
+    "Basalt": 10,
     "Sandstone": 0,
-    "Mixed": 10,
+    "Mixed": 20,
 };
 
 /**
