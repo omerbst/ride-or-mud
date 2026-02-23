@@ -282,7 +282,6 @@ body::before {
   border-radius: 16px;
   padding: 1.25rem;
   transition: all 0.3s ease;
-  cursor: pointer;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -453,6 +452,8 @@ body::before {
   flex-direction: column;
   align-items: center;
   flex: 1;
+  min-width: 0;
+  text-align: center;
 }
 
 .weather-item svg {
@@ -472,6 +473,10 @@ body::before {
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 /* ===== Clickable Weather Item ===== */
@@ -483,6 +488,25 @@ body::before {
 
 .weather-item-clickable:hover {
   background: rgba(59, 130, 246, 0.1);
+}
+
+/* ===== Slippery Rocks Warning ===== */
+.slip-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  margin-bottom: 0.75rem;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: var(--color-accent-orange);
+  font-weight: 500;
+}
+
+.slip-warning svg {
+  flex-shrink: 0;
 }
 
 /* ===== Hourly Temperature Grid ===== */
@@ -538,6 +562,12 @@ body::before {
 @media (max-width: 640px) {
   .hourly-temps-grid {
     grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .hourly-temps-grid {
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 
@@ -626,6 +656,13 @@ body::before {
 .formula-text strong {
   color: var(--color-text-primary);
   font-weight: 700;
+}
+
+/* ===== Daily Rainfall Grid ===== */
+.daily-rainfall-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  gap: 0.35rem;
 }
 
 /* ===== Rainfall Chart Section ===== */

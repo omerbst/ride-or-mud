@@ -56,11 +56,25 @@ const MUD_FACTORS = {
 };
 
 /**
+ * Rock slip penalty by rock type.
+ * Wet limestone/chalk is extremely slippery and dangerous for MTB.
+ * Penalty scales linearly with rain up to 5mm (fully wet rocks).
+ */
+const ROCK_SLIP_PENALTY = {
+    "Limestone": 15,
+    "Basalt": 5,
+    "Sandstone": 0,
+    "Mixed": 10,
+};
+
+/**
  * Calculate the Match Score for a trail.
  *
- * Formula: S = 100 - (P48 × M)
- *   P48 = precipitation sum from last 48 hours (mm)
+ * Formula: S = 100 - (P48 × M) - SlipPenalty
+ *   P48 = precipitation sum from past 4 days (mm)
  *   M   = Mud Factor from mud_index
+ *   SlipPenalty = RockPenalty × min(P48, 5) / 5
+ *     (scales linearly with rain up to 5mm — beyond that rocks are fully wet)
  *
  * Status thresholds:
  *   Green (Epic Ride):   S > 80
@@ -71,8 +85,12 @@ export function calculateMatchScore(trail, weatherData) {
     const mudFactor = MUD_FACTORS[trail.mud_index] ?? 8; // default Medium
     const p48 = weatherData.p48 || 0;
 
+    // Rock slip penalty — scales with rain up to 5mm
+    const rockPenalty = ROCK_SLIP_PENALTY[trail.rock_type] ?? 0;
+    const slipPenalty = Math.round(rockPenalty * Math.min(p48, 5) / 5);
+
     // Core formula
-    const raw = 100 - (p48 * mudFactor);
+    const raw = 100 - (p48 * mudFactor) - slipPenalty;
     const score = Math.round(Math.max(0, Math.min(100, raw)));
 
     return {
@@ -80,6 +98,8 @@ export function calculateMatchScore(trail, weatherData) {
         p48: Math.round(p48 * 10) / 10,
         mudFactor,
         mudIndex: trail.mud_index,
+        rockType: trail.rock_type,
+        slipPenalty,
         driveMinutes: estimateDriveMinutes(trail),
         tempMax: weatherData.targetDate?.tempMax,
         temp9am: weatherData.targetDate?.temp9am,

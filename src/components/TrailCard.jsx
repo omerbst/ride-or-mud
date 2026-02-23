@@ -9,6 +9,7 @@ import {
     ChevronDown,
     ChevronUp,
     CloudRain,
+    AlertTriangle,
 } from 'lucide-react';
 import { getScoreColor, getStatusLabel } from '../services/scoringEngine';
 import RainfallChart from './RainfallChart';
@@ -57,6 +58,10 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                     <Droplets size={12} />
                     Mud: {trail.mud_index}
                 </span>
+                <span className="meta-tag">
+                    <Mountain size={12} />
+                    Rock: {trail.rock_type}
+                </span>
             </div>
 
             {/* Description */}
@@ -93,6 +98,14 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                     <span className="weather-label">Rain Prob</span>
                 </div>
             </div>
+
+            {/* Slippery Rocks Warning */}
+            {scoreData.slipPenalty > 0 && (
+                <div className="slip-warning">
+                    <AlertTriangle size={14} />
+                    <span>Slippery {scoreData.rockType} rocks when wet (−{scoreData.slipPenalty} pts)</span>
+                </div>
+            )}
 
             {/* Hourly Temperature Forecast (toggled by clicking temp) */}
             {showHourly && scoreData.hourlyTemps && scoreData.hourlyTemps.length > 0 && (
@@ -177,11 +190,7 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                             }}>
                                 Daily Rainfall (mm)
                             </div>
-                            <div style={{
-                                display: 'grid',
-                                gridTemplateColumns: `repeat(${Math.min(weatherData.dailyRainfall.length, 8)}, 1fr)`,
-                                gap: '0.35rem',
-                            }}>
+                            <div className="daily-rainfall-grid">
                                 {weatherData.dailyRainfall.map((d, i) => {
                                     const isTarget = d.date === weatherData.targetDate?.date;
                                     const dayLabel = new Date(d.date + 'T12:00:00').toLocaleDateString('en-IL', { weekday: 'short' });
