@@ -12,7 +12,6 @@ import {
     AlertTriangle,
 } from 'lucide-react';
 import { getScoreColor, getStatusLabel } from '../services/scoringEngine';
-import RainfallChart from './RainfallChart';
 
 export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) {
     const [expanded, setExpanded] = useState(false);

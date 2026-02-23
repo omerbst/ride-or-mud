@@ -19,9 +19,12 @@ import Dashboard from './components/Dashboard';
 import MapView from './components/MapView';
 import './index.css';
 
-// Helper: format Date to YYYY-MM-DD for input[type="date"]
+// Helper: format Date to YYYY-MM-DD for input[type="date"] (local timezone)
 function toDateStr(d) {
-  return d.toISOString().slice(0, 10);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 // Helper: max selectable date (5 days from now — Open-Meteo forecast limit)

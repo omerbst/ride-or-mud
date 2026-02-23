@@ -2,12 +2,14 @@ import { Frown } from 'lucide-react';
 import TrailCard from './TrailCard';
 
 export default function Dashboard({ trails, scores, weather, dateLabel }) {
-    // Sort trails by score descending
-    const sortedTrails = [...trails].sort((a, b) => {
-        const sa = scores[a.id]?.score ?? 0;
-        const sb = scores[b.id]?.score ?? 0;
-        return sb - sa;
-    });
+    // Only show trails that have score data, sorted by score descending
+    const sortedTrails = trails
+        .filter((t) => scores[t.id] && weather[t.id])
+        .sort((a, b) => {
+            const sa = scores[a.id]?.score ?? 0;
+            const sb = scores[b.id]?.score ?? 0;
+            return sb - sa;
+        });
 
     if (sortedTrails.length === 0) {
         return (

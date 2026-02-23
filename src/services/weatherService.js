@@ -243,7 +243,9 @@ export function rescoreCachedWeather(trails, targetDateStr) {
         groups[key].push(trail);
     }
 
-    for (const [key, group] of Object.entries(groups)) {
+    const groupEntries = Object.entries(groups);
+
+    for (const [key, group] of groupEntries) {
         if (cache[key]?.raw) {
             try {
                 const weather = parseWeatherData(cache[key].raw, targetDateStr);
@@ -252,12 +254,13 @@ export function rescoreCachedWeather(trails, targetDateStr) {
                 }
                 found++;
             } catch {
-                // skip
+                // skip — this group's cache is unusable
             }
         }
     }
 
-    if (found === 0) return null;
+    // Only return cache results if ALL groups were resolved (avoid partial/missing cards)
+    if (found === 0 || found < groupEntries.length) return null;
     console.log(`[Weather] Re-scored ${found} groups from cache for ${targetDateStr}`);
     return results;
 }

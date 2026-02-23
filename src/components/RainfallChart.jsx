@@ -55,7 +55,7 @@ export default function RainfallChart({ hourlyData, totalRain }) {
     return (
         <div className="rainfall-section">
             <div className="rainfall-header">
-                <span className="rainfall-title">48h Rainfall Trend</span>
+                <span className="rainfall-title">Past 4-Day Rainfall Trend</span>
                 <span className="rainfall-total">{totalRain.toFixed(1)} mm total</span>
             </div>
             <ResponsiveContainer width="100%" height={100}>
