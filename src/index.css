@@ -120,6 +120,7 @@ body::before {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 /* ===== Tab Navigation ===== */
@@ -230,6 +231,16 @@ body::before {
   color: var(--color-text-primary);
   border-color: var(--color-border-hover);
   background: rgba(255, 255, 255, 0.04);
+}
+
+.refresh-text {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .refresh-text {
+    display: none;
+  }
 }
 
 /* ===== Status Bar ===== */
