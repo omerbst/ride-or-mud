@@ -3,6 +3,7 @@ import {
   Bike,
   LayoutDashboard,
   Map,
+  List,
   MapPin,
   Clock,
   CloudRain,
@@ -17,6 +18,8 @@ import {
 } from './services/scoringEngine';
 import Dashboard from './components/Dashboard';
 import MapView from './components/MapView';
+import ListView from './components/ListView';
+import SearchBox from './components/SearchBox';
 import './index.css';
 
 // Helper: format Date to YYYY-MM-DD for input[type="date"] (local timezone)
@@ -55,7 +58,8 @@ export default function App() {
     return toDateStr(d);
   })();
 
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('list');
+  const [selectedTrailId, setSelectedTrailId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [weatherData, setWeatherData] = useState({});
   const [scores, setScores] = useState({});
@@ -158,7 +162,23 @@ export default function App() {
               <span className="date-label-chip">{dateLabel}</span>
             </div>
 
+            <SearchBox
+              trails={filteredTrails}
+              scores={scores}
+              onSelectTrail={(id) => {
+                setActiveTab('list');
+                setSelectedTrailId(id);
+              }}
+            />
+
             <div className="tab-nav">
+              <button
+                className={`tab-btn ${activeTab === 'list' ? 'active' : ''}`}
+                onClick={() => setActiveTab('list')}
+              >
+                <List size={16} />
+                <span className="tab-btn-label">List</span>
+              </button>
               <button
                 className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
                 onClick={() => setActiveTab('dashboard')}
@@ -234,6 +254,15 @@ export default function App() {
               Retry
             </button>
           </div>
+        ) : activeTab === 'list' ? (
+          <ListView
+            trails={filteredTrails}
+            scores={scores}
+            weather={weatherData}
+            dateLabel={dateLabel}
+            selectedTrailId={selectedTrailId}
+            onTrailViewed={() => setSelectedTrailId(null)}
+          />
         ) : activeTab === 'dashboard' ? (
           <Dashboard
             trails={filteredTrails}
