@@ -15,8 +15,8 @@ export default function Dashboard({ trails, scores, weather, dateLabel }) {
         return (
             <div className="empty-state">
                 <Frown />
-                <h3>No trails in range</h3>
-                <p>No trails found within 75-minute drive from Tel Mond.</p>
+                <h3>אין שבילים בטווח</h3>
+                <p>לא נמצאו שבילים בטווח 75 דקות נסיעה מתל מונד.</p>
             </div>
         );
     }

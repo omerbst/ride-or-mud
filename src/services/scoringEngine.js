@@ -48,11 +48,11 @@ export function isWithinDriveRange(trail) {
  * and M = mud factor based on trail soil sensitivity
  */
 const MUD_FACTORS = {
-    "Very Low": 2,
-    "Low": 4,
-    "Medium": 8,
-    "High": 15,
-    "Very High": 25,
+    "נמוך מאוד": 2,
+    "נמוך": 4,
+    "בינוני": 8,
+    "גבוה": 15,
+    "גבוה מאוד": 25,
 };
 
 /**
@@ -61,10 +61,10 @@ const MUD_FACTORS = {
  * Penalty scales linearly with rain up to 5mm (fully wet rocks).
  */
 const ROCK_SLIP_PENALTY = {
-    "Limestone": 30,
-    "Basalt": 10,
-    "Sandstone": 0,
-    "Mixed": 20,
+    "גיר": 30,
+    "בזלת": 10,
+    "אבן חול": 0,
+    "מעורב": 20,
 };
 
 /**
@@ -124,9 +124,9 @@ export function getScoreColor(score) {
  * Get human-readable riding status
  */
 export function getStatusLabel(score) {
-    if (score > 80) return "Epic Ride 🤙";
-    if (score > 60) return "Good to Ride";
-    if (score > 40) return "Tacky / Risky";
-    if (score > 20) return "Muddy — Not Recommended";
-    return "Avoid — Full Mud 🚫";
+    if (score > 80) return "רכיבה אפית 🤙";
+    if (score > 60) return "טוב לרכיבה";
+    if (score > 40) return "דביק / מסוכן";
+    if (score > 20) return "בוצי — לא מומלץ";
+    return "להימנע — בוץ מלא 🚫";
 }

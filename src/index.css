@@ -1268,7 +1268,7 @@ body::before {
   color: var(--color-text-muted);
   background: rgba(255, 255, 255, 0.02);
   border-radius: 10px;
-  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
 }
 
 .list-row-wrapper {
@@ -1294,7 +1294,7 @@ body::before {
   padding: 0.7rem 1rem;
   cursor: pointer;
   transition: all 0.15s ease;
-  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
   user-select: none;
 }
 
@@ -1303,15 +1303,15 @@ body::before {
 }
 
 .list-row.score-border-green {
-  border-left-color: var(--color-accent-green);
+  border-right-color: var(--color-accent-green);
 }
 
 .list-row.score-border-yellow {
-  border-left-color: var(--color-accent-yellow);
+  border-right-color: var(--color-accent-yellow);
 }
 
 .list-row.score-border-red {
-  border-left-color: var(--color-accent-red);
+  border-right-color: var(--color-accent-red);
 }
 
 /* List columns */
@@ -1374,7 +1374,7 @@ body::before {
 }
 
 .list-col-chevron.rotated {
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
 }
 
 /* Score badge in list row */

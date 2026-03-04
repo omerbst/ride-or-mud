@@ -3,7 +3,7 @@ import {
     MapPin,
     Clock,
     Droplets,
-    ChevronRight,
+    ChevronLeft,
     Frown,
 } from 'lucide-react';
 import { getScoreColor, getStatusLabel } from '../services/scoringEngine';
@@ -42,8 +42,8 @@ export default function ListView({ trails, scores, weather, dateLabel, selectedT
         return (
             <div className="empty-state">
                 <Frown />
-                <h3>No trails in range</h3>
-                <p>No trails found within 75-minute drive from Tel Mond.</p>
+                <h3>אין שבילים בטווח</h3>
+                <p>לא נמצאו שבילים בטווח 75 דקות נסיעה מתל מונד.</p>
             </div>
         );
     }
@@ -56,13 +56,13 @@ export default function ListView({ trails, scores, weather, dateLabel, selectedT
         <div className="list-view">
             {/* Column headers */}
             <div className="list-header">
-                <span className="list-col list-col-score">Score</span>
-                <span className="list-col list-col-name">Trail</span>
-                <span className="list-col list-col-region">Region</span>
-                <span className="list-col list-col-drive">Drive</span>
-                <span className="list-col list-col-mud">Mud</span>
-                <span className="list-col list-col-rain">Rain 4d</span>
-                <span className="list-col list-col-status">Status</span>
+                <span className="list-col list-col-score">ציון</span>
+                <span className="list-col list-col-name">שביל</span>
+                <span className="list-col list-col-region">אזור</span>
+                <span className="list-col list-col-drive">נסיעה</span>
+                <span className="list-col list-col-mud">בוץ</span>
+                <span className="list-col list-col-rain">גשם 4 ימים</span>
+                <span className="list-col list-col-status">מצב</span>
                 <span className="list-col list-col-chevron"></span>
             </div>
 
@@ -101,7 +101,7 @@ export default function ListView({ trails, scores, weather, dateLabel, selectedT
                             {/* Drive time */}
                             <span className="list-col list-col-drive">
                                 <Clock size={11} />
-                                {scoreData.driveMinutes} min
+                                {scoreData.driveMinutes} דק׳
                             </span>
 
                             {/* Mud index */}
@@ -122,7 +122,7 @@ export default function ListView({ trails, scores, weather, dateLabel, selectedT
 
                             {/* Expand chevron */}
                             <span className={`list-col list-col-chevron ${isExpanded ? 'rotated' : ''}`}>
-                                <ChevronRight size={16} />
+                                <ChevronLeft size={16} />
                             </span>
                         </div>
 

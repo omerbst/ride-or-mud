@@ -75,7 +75,7 @@ export default function SearchBox({ trails, scores, onSelectTrail }) {
                     ref={inputRef}
                     type="text"
                     className="search-input"
-                    placeholder="Search trails..."
+                    placeholder="חיפוש..."
                     value={query}
                     onChange={(e) => {
                         setQuery(e.target.value);

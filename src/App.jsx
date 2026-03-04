@@ -45,9 +45,9 @@ function getDateLabel(dateStr) {
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  if (target.getTime() === today.getTime()) return 'Today';
-  if (target.getTime() === tomorrow.getTime()) return 'Tomorrow';
-  return target.toLocaleDateString('en-IL', { weekday: 'short', month: 'short', day: 'numeric' });
+  if (target.getTime() === today.getTime()) return 'היום';
+  if (target.getTime() === tomorrow.getTime()) return 'מחר';
+  return target.toLocaleDateString('he-IL', { weekday: 'short', month: 'short', day: 'numeric' });
 }
 
 export default function App() {
@@ -93,7 +93,7 @@ export default function App() {
       setLastUpdated(new Date());
     } catch (err) {
       console.error('Failed to load weather data:', err);
-      setError('Failed to fetch weather data. Please try again.');
+      setError('נכשל בטעינת נתוני מזג אוויר. נסה שוב.');
     }
 
     setLoading(false);
@@ -142,8 +142,8 @@ export default function App() {
           <div className="header-logo">
             <Bike size={28} />
             <div>
-              <h1>Ride or Mud</h1>
-              <div className="subtitle">MTB TRAIL RECOMMENDER — ISRAEL <span className="version-tag">v1.4</span></div>
+              <h1>רכיב?</h1>
+              <div className="subtitle">ממליץ שבילי הרים — ישראל <span className="version-tag">v1.4</span></div>
             </div>
           </div>
 
@@ -177,21 +177,21 @@ export default function App() {
                 onClick={() => setActiveTab('list')}
               >
                 <List size={16} />
-                <span className="tab-btn-label">List</span>
+                <span className="tab-btn-label">רשימה</span>
               </button>
               <button
                 className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
                 onClick={() => setActiveTab('dashboard')}
               >
                 <LayoutDashboard size={16} />
-                <span className="tab-btn-label">Dashboard</span>
+                <span className="tab-btn-label">לוח</span>
               </button>
               <button
                 className={`tab-btn ${activeTab === 'map' ? 'active' : ''}`}
                 onClick={() => setActiveTab('map')}
               >
                 <Map size={16} />
-                <span className="tab-btn-label">Map</span>
+                <span className="tab-btn-label">מפה</span>
               </button>
             </div>
 
@@ -202,7 +202,7 @@ export default function App() {
               title="Refresh weather data"
             >
               <RefreshCw size={14} className={loading ? 'spin' : ''} />
-              <span className="refresh-text">Refresh</span>
+              <span className="refresh-text">רענון</span>
             </button>
           </div>
         </div>
@@ -217,11 +217,11 @@ export default function App() {
           </div>
           <div className="status-chip">
             <Clock size={14} />
-            {filteredTrails.length} trails within 75 min
+            {filteredTrails.length} שבילים עד 75 דק׳
           </div>
           <div className="status-chip">
             <Calendar size={14} />
-            Forecast: {dateLabel}
+            תחזית: {dateLabel}
           </div>
           <div className="status-chip">
             <CloudRain size={14} />
@@ -232,7 +232,7 @@ export default function App() {
           </div>
           {lastUpdated && (
             <div className="status-chip">
-              Updated {lastUpdated.toLocaleDateString('en-IL', { day: '2-digit', month: '2-digit' })} {lastUpdated.toLocaleTimeString('en-IL', { hour: '2-digit', minute: '2-digit' })}
+              עודכן {lastUpdated.toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit' })} {lastUpdated.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
             </div>
           )}
         </div>
@@ -244,14 +244,14 @@ export default function App() {
           <div className="loading-overlay">
             <div className="loading-spinner" />
             <div className="loading-text">
-              Fetching weather data from Open-Meteo...
+              טוען נתוני מזג אוויר מ-Open-Meteo...
             </div>
           </div>
         ) : error ? (
           <div className="empty-state">
             <h3>⚠️ {error}</h3>
             <button onClick={() => loadData()} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem', cursor: 'pointer' }}>
-              Retry
+              נסה שוב
             </button>
           </div>
         ) : activeTab === 'list' ? (

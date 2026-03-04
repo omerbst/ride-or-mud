@@ -32,7 +32,7 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                 </div>
                 <div className={`score-badge ${color}`}>
                     <span className="score-number">{scoreData.score}</span>
-                    <span className="score-label">Score</span>
+                    <span className="score-label">ציון</span>
                 </div>
             </div>
 
@@ -51,15 +51,15 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                 </span>
                 <span className="meta-tag">
                     <Clock size={12} />
-                    {scoreData.driveMinutes} min drive
+                    {scoreData.driveMinutes} דק׳ נסיעה
                 </span>
                 <span className="meta-tag">
                     <Droplets size={12} />
-                    Mud: {trail.mud_index}
+                    בוץ: {trail.mud_index}
                 </span>
                 <span className="meta-tag">
                     <Mountain size={12} />
-                    Rock: {trail.rock_type}
+                    סלע: {trail.rock_type}
                 </span>
             </div>
 
@@ -76,7 +76,7 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                     <span className="weather-value">
                         {scoreData.p48} mm
                     </span>
-                    <span className="weather-label">Past 4d Rain</span>
+                    <span className="weather-label">גשם 4 ימים</span>
                 </div>
                 <div
                     className="weather-item weather-item-clickable"
@@ -87,14 +87,14 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                     <span className="weather-value">
                         {scoreData.temp9am != null ? `${Math.round(scoreData.temp9am)}°C` : '—'}
                     </span>
-                    <span className="weather-label">{dateLabel || 'Target'} 9AM</span>
+                    <span className="weather-label">{dateLabel || 'יעד'} 9:00</span>
                 </div>
                 <div className="weather-item">
                     <CloudRain size={16} />
                     <span className="weather-value">
                         {scoreData.rainProbability != null ? `${scoreData.rainProbability}%` : '—'}
                     </span>
-                    <span className="weather-label">Rain Prob</span>
+                    <span className="weather-label">סיכוי גשם</span>
                 </div>
             </div>
 
@@ -102,7 +102,7 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
             {scoreData.slipPenalty > 0 && (
                 <div className="slip-warning">
                     <AlertTriangle size={14} />
-                    <span>Slippery {scoreData.rockType} rocks when wet (−{scoreData.slipPenalty} pts)</span>
+                    <span>סלעי {scoreData.rockType} חלקלקים כשרטוב (−{scoreData.slipPenalty} נק׳)</span>
                 </div>
             )}
 
@@ -110,7 +110,7 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
             {showHourly && scoreData.hourlyTemps && scoreData.hourlyTemps.length > 0 && (
                 <div className="hourly-temps">
                     <div className="hourly-temps-header">
-                        Hourly Temperature — {dateLabel}
+                        טמפרטורה שעתית — {dateLabel}
                     </div>
                     <div className="hourly-temps-grid">
                         {scoreData.hourlyTemps.map((h, i) => {
@@ -166,11 +166,11 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
             >
                 {expanded ? (
                     <>
-                        <ChevronUp size={14} /> Hide Details
+                        <ChevronUp size={14} /> הסתר פרטים
                     </>
                 ) : (
                     <>
-                        <ChevronDown size={14} /> Show Details
+                        <ChevronDown size={14} /> הצג פרטים
                     </>
                 )}
             </button>
@@ -187,7 +187,7 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                                 marginBottom: '0.5rem',
                                 fontWeight: 500,
                             }}>
-                                Daily Rainfall (mm)
+                                גשם יומי (מ״מ)
                             </div>
                             <div className="daily-rainfall-grid">
                                 {weatherData.dailyRainfall.map((d, i) => {
@@ -240,10 +240,10 @@ export default function TrailCard({ trail, scoreData, weatherData, dateLabel }) 
                             background: 'rgba(255,255,255,0.03)',
                             borderRadius: '6px',
                         }}>
-                            <strong>Today:</strong>{' '}
-                            Max {weatherData.current.tempMax != null ? `${Math.round(weatherData.current.tempMax)}°C` : '—'},{' '}
-                            Rain Prob {weatherData.current.rainProbability ?? '—'}%,{' '}
-                            Precip {weatherData.current.rainSum?.toFixed(1) ?? '0.0'} mm
+                            <strong>היום:</strong>{' '}
+                            מקס {weatherData.current.tempMax != null ? `${Math.round(weatherData.current.tempMax)}°C` : '—'},{' '}
+                            סיכוי גשם {weatherData.current.rainProbability ?? '—'}%,{' '}
+                            משקע {weatherData.current.rainSum?.toFixed(1) ?? '0.0'} מ"מ
                         </div>
                     )}
                 </div>
