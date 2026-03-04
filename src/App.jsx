@@ -143,7 +143,7 @@ export default function App() {
             <Bike size={28} />
             <div>
               <h1>רכיב?</h1>
-              <div className="subtitle">ממליץ שבילי הרים — ישראל <span className="version-tag">v1.4</span></div>
+              <div className="subtitle">ממליץ שבילי הרים — ישראל <span className="version-tag">v1.5</span></div>
             </div>
           </div>
 
